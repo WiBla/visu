@@ -4,18 +4,16 @@
 	<meta charset="UTF-8">
 	<title>Pong in JS !</title>
 	<style>
+		* {margin: 0; padding: 0;}
 		body {
 			width: 100%; height: 100%;
-			background: #202020;
-			margin: 0;
+			background: #111;
 		}
 		canvas {
-			border: solid 1px #FFF;
-			border-left: none;
-			border-right: none;
 			image-rendering: pixelated;
 			width: 100%; height: 100%;
 			margin: 0 auto;
+			transform: translate(0, 50%);
 		}
 	</style>
 </head>
@@ -26,7 +24,7 @@
 		  (Slightly modified to suit my preferences)
 			https://www.youtube.com/watch?v=ju09womACpQ
 	-->
-	<canvas id="pong" width="600" height="400" />
+	<canvas id="pong" />
 	<script src="pong.js"></script>
 </body>
 </html>
