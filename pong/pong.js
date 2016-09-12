@@ -15,8 +15,9 @@ class Vec {
 
 class Rect {
 	constructor(x = 0, y = 0) {
+		let smallerSize = Math.min(canvas.width, canvas.height);
 		this.pos = new Vec(0, 0);
-		this.size = new Vec(x, y);
+		this.size = new Vec(smallerSize/100*x, smallerSize/100*y);
 	}
 	get left() {
 		return this.pos.x - this.size.x / 2;
@@ -34,14 +35,15 @@ class Rect {
 
 class Ball extends Rect {
 	constructor() {
-		super(10, 10);
+		super(5, 5);
 		this.vel = new Vec;
 	}
 }
 
 class Player extends Rect {
 	constructor() {
-		super(20, 100);
+		
+		super(5, 30);
 		this.vel = new Vec;
 		this.score = 0;
 
@@ -57,6 +59,9 @@ class Pong {
 	constructor(canvas) {
 		this._canvas = canvas;
 		this._context = canvas.getContext('2d');
+
+		this._accumulator = 0;
+		this.step = 1/60;
 
 		this.initialSpeed = 250;
 
@@ -77,15 +82,15 @@ class Pong {
 			this.sounds[sound].volume = 0.1;
 		}
 
-		this.players[0].pos.x = 40;
-		this.players[1].pos.x = this._canvas.width - 40;
+		this.players[0].pos.x = 20;
+		this.players[1].pos.x = this._canvas.width - 20;
 		this.players.forEach(p => p.pos.y = this._canvas.height / 2);
 
 		let lastTime = null;
 		this._frameCallback = (ms) => {
 			if (lastTime !== null) {
-				const diff = ms - lastTime;
-				this.update(diff / 1000);
+				this.update((ms - lastTime)/1000);
+				this.draw();
 			}
 			lastTime = ms;
 			requestAnimationFrame(this._frameCallback);
@@ -176,7 +181,7 @@ class Pong {
 	start() {
 		requestAnimationFrame(this._frameCallback);
 	}
-	update(dt) {
+	simulate(dt) {
 		const cvs = this._canvas;
 		const ball = this.ball;
 		ball.pos.x += ball.vel.x * dt;
@@ -201,8 +206,13 @@ class Pong {
 			player.update(dt);
 			this.collide(player, ball);
 		});
-
-		this.draw();
+	}
+	update(dt) {
+		this._accumulator += dt;
+		while(this._accumulator > this.step) {
+			this.simulate(this.step);
+			this._accumulator -= this.step;
+		}
 	}
 }
 

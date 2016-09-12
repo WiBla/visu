@@ -15,8 +15,6 @@ class Vec {
 
 class particle {
 	constructor(w, h) {
-		// Creates particule on the side of canvas
-		// (either top,bottom,left or right but always on a side)
 		let x;
 		let y;
 		let min = Math.min(canvas.width, canvas.height);
@@ -53,6 +51,8 @@ class particle {
 			}
 		});
 
+		// Creates particule on the side of canvas
+		// (either top,bottom,left or right but always on a side)
 		if (Math.random() > .5) {
 			x = (Math.random() > .5 ? canvas.width : 0);
 			y = Math.random()*(canvas.height+1);
